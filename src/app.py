@@ -38,6 +38,42 @@ activities = {
         "schedule": "Mondays, Wednesdays, Fridays, 2:00 PM - 3:00 PM",
         "max_participants": 30,
         "participants": ["john@mergington.edu", "olivia@mergington.edu"]
+    },
+    "Basketball Team": {
+        "description": "Practice basketball skills and compete in local tournaments",
+        "schedule": "Mondays and Wednesdays, 4:00 PM - 6:00 PM",
+        "max_participants": 15,
+        "participants": []
+    },
+    "Soccer Club": {
+        "description": "Train for soccer matches and improve team coordination",
+        "schedule": "Tuesdays and Thursdays, 4:00 PM - 5:30 PM",
+        "max_participants": 22,
+        "participants": []
+    },
+    "Art Club": {
+        "description": "Explore various art forms including painting, drawing, and sculpture",
+        "schedule": "Wednesdays, 3:00 PM - 5:00 PM",
+        "max_participants": 18,
+        "participants": []
+    },
+    "Music Band": {
+        "description": "Learn to play instruments and perform in school events",
+        "schedule": "Fridays, 4:00 PM - 6:00 PM",
+        "max_participants": 10,
+        "participants": []
+    },
+    "Debate Club": {
+        "description": "Develop public speaking and critical thinking skills through debates",
+        "schedule": "Thursdays, 3:30 PM - 5:00 PM",
+        "max_participants": 16,
+        "participants": []
+    },
+    "Science Club": {
+        "description": "Conduct experiments and explore scientific concepts",
+        "schedule": "Mondays, 3:30 PM - 5:00 PM",
+        "max_participants": 14,
+        "participants": []
     }
 }
 
@@ -62,6 +98,19 @@ def signup_for_activity(activity_name: str, email: str):
     # Get the specific activity
     activity = activities[activity_name]
 
+    # Check if student is already signed up
+    if email in activity["participants"]:
+        raise HTTPException(status_code=400, detail="Student is already signed up for this activity")
+
+    # Check if activity has more than max_participants and reject if so
+    if len(activity["participants"]) >= activity["max_participants"]:
+        raise HTTPException(status_code=400, detail="Activity is full")
+
     # Add student
     activity["participants"].append(email)
     return {"message": f"Signed up {email} for {activity_name}"}
+
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000)
